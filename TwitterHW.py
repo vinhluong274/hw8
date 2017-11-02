@@ -80,10 +80,12 @@ cursor.execute("CREATE TABLE Tweets (tweet_id TEXT, author TEXT, time_posted TIM
 umsi_tweets = get_tweets()
 
 # 4 - Use a for loop, the cursor you defined above to execute INSERT statements, that insert the data from each of the tweets in umsi_tweets into the correct columns in each row of the Tweets database table.
-
+for a in umsi_tweets["statuses"]:
+    tup = a["id"], a["user"]["screen_name"], a["created_at"], a["text"], a["retweet_count"]
+    cursor.execute("INSERT INTO Tweets (tweet_id, author, time_posted, tweet_text, retweets) VALUES (?,?,?,?,?)", tup)
 
 #  5- Use the database connection to commit the changes to the database
-
+connection.commit()
 # You can check out whether it worked in the SQLite browser! (And with the tests.)
 
 ## [PART 3] - SQL statements
@@ -93,11 +95,20 @@ umsi_tweets = get_tweets()
     # Mon Oct 09 15:45:45 +0000 2017 - RT @MikeRothCom: Beautiful morning at @UMich - It’s easy to forget to
     # take in the view while running from place to place @umichDLHS  @umich…
 # Include the blank line between each tweet.
+for line in cursor.execute("SELECT * FROM Tweets ORDER BY time_posted DESC"):
+    print(line[2], line[3] + "\n")
 
 
 # Select the author of all of the tweets (the full rows/tuples of information) that have been retweeted MORE
 # than 2 times, and fetch them into the variable more_than_2_rts.
 # Print the results
+more_than_2_rts = []
+
+for row in cursor.execute("SELECT * FROM Tweets WHERE retweets >= 2"):
+    more_than_2_rts.append(row[1])
+
+for name in more_than_2_rts:
+    print(name + "\n")
 
 
 

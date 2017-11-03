@@ -34,7 +34,7 @@ except:
 
 
 def get_tweets():
-    data = api.search('umsi')
+    data = api.search('umsi')#searches twitter feed for tweets including UMSI
     if 'umsi' in CACHE_DICTION:
         print("Data was in the cache \n")
         return CACHE_DICTION['umsi']
@@ -42,7 +42,7 @@ def get_tweets():
         print("Making a request for new data...\n")
         data = api.search('umsi')
         CACHE_DICTION['umsi'] = data
-        dumped_json_cache = json.dumps(CACHE_DICTION)
+        dumped_json_cache = json.dumps(CACHE_DICTION)#stores the search in json file named CACHE_DICTION
         fw = open(CACHE_FNAME,"w")
         fw.write(dumped_json_cache)
         fw.close() # Close the open file
@@ -54,7 +54,7 @@ tweet_result = get_tweets()
 for a in tweet_result["statuses"]:# iterates through the 5 most recent tweets
     print("TEXT: ", a['text'])
     print("CREATED AT: : ", a['created_at'])
-    print("USERNAME: ", a['user']['screen_name'])
+    print("USERNAME: ", a['user']['screen_name'])#this is a nested dictionary so we must have two indices to reference two keys
     print("\n")
 ## [PART 2]
 # Create a database: tweets.sqlite,
@@ -96,7 +96,7 @@ connection.commit()
     # take in the view while running from place to place @umichDLHS  @umich…
 # Include the blank line between each tweet.
 for line in cursor.execute("SELECT * FROM Tweets ORDER BY time_posted DESC"):
-    print(line[2], line[3] + "\n")
+    print(line[2], line[3] + "\n") #indexes 2 and 3 are respectively the Timestamp and tweet
 
 
 # Select the author of all of the tweets (the full rows/tuples of information) that have been retweeted MORE
@@ -104,9 +104,10 @@ for line in cursor.execute("SELECT * FROM Tweets ORDER BY time_posted DESC"):
 # Print the results
 more_than_2_rts = []
 
-for row in cursor.execute("SELECT * FROM Tweets WHERE retweets >= 2"):
+for row in cursor.execute("SELECT * FROM Tweets WHERE retweets >= 2"): #SQL statement that selects all tweets where retweets column is greater than 2
     more_than_2_rts.append(row[1])
 
+print("These users have had at least 2 RTs on their UMSI Tweets: ")
 for name in more_than_2_rts:
     print(name + "\n")
 

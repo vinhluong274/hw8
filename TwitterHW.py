@@ -1,3 +1,6 @@
+#Vinh Luong
+#Github Link: https://github.com/vinhluong274/hw8
+
 # Import statements
 import unittest
 import sqlite3
@@ -29,10 +32,6 @@ except:
 
 ## [PART 1]
 
-# Here, define a function called get_tweets that searches for all tweets referring to or by "umsi"
-# Your function must cache data it retrieves and rely on a cache file!
-
-
 def get_tweets():
     data = api.search('umsi')#searches twitter feed for tweets including UMSI
     if 'umsi' in CACHE_DICTION:
@@ -48,24 +47,14 @@ def get_tweets():
         fw.close() # Close the open file
         return CACHE_DICTION["umsi"]
 
-
 tweet_result = get_tweets()
 for a in tweet_result["statuses"]:# iterates through the 5 most recent tweets
     print("TEXT: ", a['text'])
     print("CREATED AT: : ", a['created_at'])
     print("USERNAME: ", a['user']['screen_name'])#this is a nested dictionary so we must have two indices to reference two keys
     print("\n")
+
 ## [PART 2]
-# Create a database: tweets.sqlite,
-# And then load all of those tweets you got from Twitter into a database table called Tweets, with the following columns in each row:
-## tweet_id - containing the unique id that belongs to each tweet
-## author - containing the screen name of the user who posted the tweet (note that even for RT'd tweets, it will be the person whose timeline it is)
-## time_posted - containing the date/time value that represents when the tweet was posted (note that this should be a TIMESTAMP column data type!)
-## tweet_text - containing the text that goes with that tweet
-## retweets - containing the number that represents how many times the tweet has been retweeted
-
-# Below we have provided interim outline suggestions for what to do, sequentially, in comments.
-
 # 1 - Make a connection to a new database tweets.sqlite, and create a variable to hold the database cursor.
 connection = sqlite3.connect('twitterDB.sqlite')
 cursor = connection.cursor()
@@ -85,18 +74,10 @@ for a in umsi_tweets["statuses"]:
 
 #  5- Use the database connection to commit the changes to the database
 connection.commit()
-# You can check out whether it worked in the SQLite browser! (And with the tests.)
 
 ## [PART 3] - SQL statements
-# Select all of the tweets (the full rows/tuples of information) from umsi_tweets and display the date and message of each tweet in the form:
-    # Mon Oct 09 16:02:03 +0000 2017 - #MondayMotivation https://t.co/vLbZpH390b
-    #
-    # Mon Oct 09 15:45:45 +0000 2017 - RT @MikeRothCom: Beautiful morning at @UMich - It’s easy to forget to
-    # take in the view while running from place to place @umichDLHS  @umich…
-# Include the blank line between each tweet.
 for line in cursor.execute("SELECT * FROM Tweets ORDER BY time_posted DESC"):
     print(line[2], line[3] + "\n") #indexes 2 and 3 are respectively the Timestamp and tweet
-
 
 # Select the author of all of the tweets (the full rows/tuples of information) that have been retweeted MORE
 # than 2 times, and fetch them into the variable more_than_2_rts.

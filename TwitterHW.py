@@ -50,7 +50,6 @@ def get_tweets():
 
 
 tweet_result = get_tweets()
-# print(tweet_result)
 for a in tweet_result["statuses"]:# iterates through the 5 most recent tweets
     print("TEXT: ", a['text'])
     print("CREATED AT: : ", a['created_at'])
